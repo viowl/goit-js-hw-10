@@ -1,0 +1,2 @@
+import"./assets/modulepreload-polyfill-ec808ebb.js";/* empty css                      */const e=3e3;let t=null;const i=document.querySelector(".js-alert"),n=document.querySelector(".js-show-alert");n.addEventListener("click",s);i.addEventListener("click",c);function c(){t&&clearTimeout(t),o()}function s(){i.classList.add("is-visible"),t=setTimeout(o,e)}function o(){i.classList.remove("is-visible")}
+//# sourceMappingURL=commonHelpers2.js.map

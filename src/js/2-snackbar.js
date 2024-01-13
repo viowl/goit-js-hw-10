@@ -1,27 +1,44 @@
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
-const NOTIFICATION_DELAY = 3000;
-let timeoutId = null;
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('.form');
 
-const notification = document.querySelector(".js-alert");
-const showButton = document.querySelector(".js-show-alert");
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-showButton.addEventListener("click", showNotification);
-notification.addEventListener("click", onNotificationClick);
+    const delayInput = form.elements['delay'];
+    const delay = parseInt(delayInput.value);
 
-/*
- * Функції
- */
-function onNotificationClick() {
-  if (timeoutId) clearTimeout(timeoutId);
-  hideNotification();
-}
+    const stateInput = form.elements['state'];
+    const state = stateInput.value;
 
-function showNotification() {
-  notification.classList.add("is-visible");
+    try {
+      const result = await new Promise((resolve, reject) => {
+        if (state === 'fulfilled') {
+          setTimeout(() => {
+            resolve(delay);
+          }, delay);
+        } else {
+          setTimeout(() => {
+            reject(delay);
+          }, delay);
+        }
+        form.reset();
+      });
 
-  timeoutId = setTimeout(hideNotification, NOTIFICATION_DELAY);
-}
+      iziToast.success({
+        title: 'Success',
+        message: `✅ Fulfilled promise in ${result}ms`,
+        position: 'topRight'
+      });
 
-function hideNotification() {
-  notification.classList.remove("is-visible");
-}
+    } catch (error) {
+      iziToast.error({
+        title: 'Error',
+        message: `❌ Rejected promise in ${error}ms`,
+        position: 'topRight'
+      });
+    }
+  });
+});
